@@ -29,6 +29,14 @@
         group: root
         mode: '0644'
 
+    - name: Copy .env.local file
+      ansible.builtin.copy:
+        src: ../.env.local
+        dest: /home/ubuntu/.env.local
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: Run docker compose file
       community.docker.docker_compose_v2:
         project_src: /home/ubuntu
@@ -50,5 +58,5 @@
     - name: Copy .env.local file
       community.docker.docker_container_copy_into:
         container: packeton-packeton
-        path: ../.env.local
+        path: /.env.local
         container_path: /data/.env.local
