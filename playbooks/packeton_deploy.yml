@@ -3,21 +3,18 @@
   become: true
 
   tasks:
-    - name: Debug environment variables
-      ansible.builtin.shell: |
-        echo "POSTGRES_USER=${POSTGRES_USER}"
-        echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
-        echo "POSTGRES_DB=${POSTGRES_DB}"
-        echo "ADMIN_USER=${ADMIN_USER}"
-        echo "ADMIN_PASSWORD=${ADMIN_PASSWORD}"
-        echo "ADMIN_EMAIL=${ADMIN_EMAIL}"
-        echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
-        echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-        echo "AWS_REGION=${AWS_REGION}"
-        echo "S3_BUCKET_NAME=${S3_BUCKET_NAME}"
-      register: env_output
-    - debug:
-        var: env_output.stdout
+    - name: Set variables in server
+      ansible.builtin.set_fact:
+        POSTGRES_USER: "{{ POSTGRES_USER }}"
+        POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
+        POSTGRES_DB: "{{ POSTGRES_DB }}"
+        ADMIN_USER: "{{ ADMIN_USER }}"
+        ADMIN_PASSWORD: "{{ ADMIN_PASSWORD }}"
+        ADMIN_EMAIL: "{{ ADMIN_EMAIL }}"
+        AWS_ACCESS_KEY_ID: "{{ AWS_ACCESS_KEY_ID }}"
+        AWS_SECRET_ACCESS_KEY: "{{ AWS_SECRET_ACCESS_KEY }}"
+        AWS_REGION: "{{ AWS_REGION }}"
+        S3_BUCKET_NAME: "{{ S3_BUCKET_NAME }}"
 
     - name: Copy docker-compose.yml file
       ansible.builtin.copy:
