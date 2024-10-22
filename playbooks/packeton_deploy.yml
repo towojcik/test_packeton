@@ -62,6 +62,6 @@
 
     - name: Copy .env.local file
       community.docker.docker_container_copy_into:
-        name: speardevs_packeton_packeton
+        container: packeton
         path: .env.local
         container_path: /data/.env.local
