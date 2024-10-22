@@ -55,12 +55,6 @@
         files:
           - docker-compose.yml
 
-    - name: Ensure docker-compose is running
-      ansible.builtin.systemd:
-        name: docker-compose@speardevs_packeton
-        state: started
-        enabled: true
-
     - name: Remove docker-compose.yml file
       ansible.builtin.file:
         path: /home/ubuntu/docker-compose.yml
