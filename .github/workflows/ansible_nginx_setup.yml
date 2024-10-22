@@ -1,0 +1,32 @@
+name: Run Packeton Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Ansible Playbook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY_SERVER }}" > private_key.pem
+          chmod 600 private_key.pem
+          eval $(ssh-agent -s)
+          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add private_key.pem
+
+      - name: Install Ansible
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install ansible -y
+
+      - name: Run Ansible Playbook
+        env:
+          ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}
+          ANSIBLE_HOST_KEY_CHECKING: False
+        run: |
+          ansible-playbook -i ${{ secrets.ANSIBLE_SERVER_IP }}, playbooks/packeton_deploy.yml --private-key private_key.pem -u ${{ secrets.ANSIBLE_USER }}
