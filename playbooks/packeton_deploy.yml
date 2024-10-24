@@ -34,9 +34,8 @@
       ansible.builtin.copy:
         src: ../.env.local
         dest: /home/ubuntu/.env.local
-        owner: root
-        group: root
-        mode: '0644'
+        owner: ubuntu
+        group: ubuntu
 
     - name: Replace placeholders in .env.local file
       ansible.builtin.shell: |
