@@ -2,6 +2,10 @@
   hosts: all
   become: true
 
+  vars:
+    ENDPOINT: "{{ lookup('env', 'ENDPOINT') }}"
+    S3_BUCKET_NAME: "{{ lookup('env', 'S3_BUCKET_NAME') }}"
+
   tasks:
     - name: Create .env file
       ansible.builtin.copy:
