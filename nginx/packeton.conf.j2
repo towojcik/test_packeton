@@ -3,9 +3,6 @@ server {
 
     server_name {{ DOMAIN }};
 
-    ssl_certificate /etc/nginx/ssl/gob.ar.crt;
-    ssl_certificate_key /etc/nginx/ssl/gob.ar.key;
-
     gzip_vary on;
     gzip_proxied any;
     gzip_comp_level 6;
