@@ -3,6 +3,9 @@ server {
 
     server_name {{ DOMAIN }};
 
+    ssl_certificate /etc/letsencrypt/live/{{ DOMAIN }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ DOMAIN }}/privkey.pem;
+
     gzip_vary on;
     gzip_proxied any;
     gzip_comp_level 6;
