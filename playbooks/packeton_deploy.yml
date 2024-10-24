@@ -46,11 +46,6 @@
         files:
           - docker-compose.yml
 
-    - name: Remove docker-compose.yml file
-      ansible.builtin.file:
-        path: /home/ubuntu/docker-compose.yml
-        state: absent
-
     - name: Copy .env.local file
       community.docker.docker_container_copy_into:
         container: packeton-packeton
@@ -61,3 +56,26 @@
       community.docker.docker_container_exec:
         container: packeton-packeton
         command: "/bin/sh -c 'cat /tmp/.env.temp >> /data/.env && rm /tmp/.env.temp'"
+
+    - name: Restart docker compose
+      community.docker.docker_compose_v2:
+        project_src: /home/ubuntu
+        state: restarted
+        project_name: speardevs_packeton
+        files:
+          - docker-compose.yml
+
+    - name: Remove docker-compose.yml file
+      ansible.builtin.file:
+        path: /home/ubuntu/docker-compose.yml
+        state: absent
+
+    - name: Remove .env file
+      ansible.builtin.file:
+        path: /home/ubuntu/.env
+        state: absent
+
+    - name: Remove .env.temp file
+      ansible.builtin.file:
+        path: /home/ubuntu/.env.temp
+        state: absent

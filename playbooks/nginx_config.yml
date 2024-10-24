@@ -1,30 +1,27 @@
----
-- hosts: webservers
+- name: NGINE CONFIGURATION
+  hosts: webservers
   become: true
+  vars:
+    domain: "{{ lookup('env', 'DOMAIN') }}"
+    email: "{{ lookup('env', 'EMAIL') }}"
   tasks:
-    - name: Copy Nginx configuration file
-      ansible.builtin.copy:
-        src: ../nginx/packeton.conf
-        dest: /etc/nginx/conf.d/packeton.conf
-        owner: root
-        group: root
-        mode: '0644'
 
-    - name: copy nginx template file
+    - name: Copy nginx template file
       ansible.builtin.template:
         src: ../nginx/packeton.conf.j2
         dest: /etc/nginx/conf.d/packeton.conf
-      vars:
-        domain: "{{ lookup('env', 'DOMAIN') }}"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
 
     - name: Generate SSL certificate with Certbot for Nginx
-      shell: |
-        certbot --nginx -d yourdomain.com -m youremail@example.com --agree-tos --no-eff-email --redirect
+      ansible.builtin.shell: |
+        certbot --nginx -d {{ domain }} -m {{ email }} --agree-tos --no-eff-email --redirect
       args:
-        creates: /etc/letsencrypt/live/yourdomain.com/fullchain.pem
+        creates: /etc/letsencrypt/live/{{ domain }}/fullchain.pem
 
     - name: Setup cron job for automatic cert renewal
-      cron:
+      ansible.builtin.cron:
         name: "Renew Let's Encrypt certificates"
         job: "/usr/bin/certbot renew --quiet"
         state: present
