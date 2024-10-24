@@ -10,7 +10,7 @@
         group: root
         mode: '0644'
 
-    - namme: copy nginx template file
+    - name: copy nginx template file
       ansible.builtin.template:
         src: ../nginx/packeton.conf.j2
         dest: /etc/nginx/conf.d/packeton.conf

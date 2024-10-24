@@ -80,4 +80,4 @@
     - name: Update .env file in container
       community.docker.docker_container_exec:
         container: packeton-packeton
-        command: "cat /tmp/.env.temp >> /data/.env && rm /tmp/.env.temp"
+        command: "/bin/sh -c 'cat /tmp/.env.temp >> /data/.env && rm /tmp/.env.temp'"
