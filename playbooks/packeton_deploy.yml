@@ -2,11 +2,22 @@
   hosts: all
   become: true
 
-  vars:
-    ENDPOINT: "{{ lookup('env', 'ENDPOINT') }}"
-    S3_BUCKET_NAME: "{{ lookup('env', 'S3_BUCKET_NAME') }}"
 
   tasks:
+    - name: Set environment variables
+      ansible.builtin.set_fact:
+        POSTGRES_USER: "{{ POSTGRES_USER }}"
+        POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
+        POSTGRES_DB: "{{ POSTGRES_DB }}"
+        ADMIN_USER: "{{ ADMIN_USER }}"
+        ADMIN_PASSWORD: "{{ ADMIN_PASSWORD }}"
+        ADMIN_EMAIL: "{{ ADMIN_EMAIL }}"
+        AWS_ACCESS_KEY_ID: "{{ AWS_ACCESS_KEY_ID }}"
+        AWS_SECRET_ACCESS_KEY: "{{ AWS_SECRET_ACCESS_KEY }}"
+        AWS_REGION: "{{ AWS_REGION }}"
+        S3_BUCKET_NAME: "{{ S3_BUCKET_NAME }}"
+        ENDPOINT: "{{ ENDPOINT }}"
+
     - name: Create .env file
       ansible.builtin.copy:
         dest: /home/ubuntu/.env
