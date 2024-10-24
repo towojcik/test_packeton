@@ -30,20 +30,20 @@
         group: root
         mode: '0644'
 
-    - name: Copy .env.local file
+    - name: Copy .env.temp file
       ansible.builtin.copy:
-        src: ../.env.local
-        dest: /home/ubuntu/.env.local
+        src: ../.env.temp
+        dest: /home/ubuntu/.env.temp
         owner: ubuntu
         group: ubuntu
         mode: '0644'
 
-    - name: Replace placeholders in .env.local file
+    - name: Replace placeholders in .env.temp file
       ansible.builtin.shell: |
-            "sed -i "s#_ENDPOINT_#${ENDPOINT}#g" /home/ubuntu/.env.local"
-            "sed -i "s#_AWS_REGION_#${AWS_REGION}#g" /home/ubuntu/.env.local"
-            "sed -i "s#_AWS_ACCESS_KEY_ID_#${AWS_ACCESS_KEY_ID}#g" /home/ubuntu/.env.local"
-            "sed -i "s#_AWS_SECRET_ACCESS_KEY_#${AWS_SECRET_ACCESS_KEY}#g" /home/ubuntu/.env.local"
+            "sed -i "s#_ENDPOINT_#${ENDPOINT}#g" /home/ubuntu/.env.temp"
+            "sed -i "s#_AWS_REGION_#${AWS_REGION}#g" /home/ubuntu/.env.temp"
+            "sed -i "s#_AWS_ACCESS_KEY_ID_#${AWS_ACCESS_KEY_ID}#g" /home/ubuntu/.env.temp"
+            "sed -i "s#_AWS_SECRET_ACCESS_KEY_#${AWS_SECRET_ACCESS_KEY}#g" /home/ubuntu/.env.temp"
       become: true
       args:
         executable: /bin/bash
@@ -69,8 +69,8 @@
     - name: Copy .env.local file
       community.docker.docker_container_copy_into:
         container: packeton-packeton
-        path: /home/ubuntu/.env.local
-        container_path: /tmp/.env.local
+        path: /home/ubuntu/.env.temp
+        container_path: /tmp/.env.temp
 
     - name: Update .env file in container
       community.docker.docker_container_exec:
