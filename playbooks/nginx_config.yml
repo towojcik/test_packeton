@@ -16,9 +16,9 @@
 
     - name: Generate SSL certificate with Certbot for Nginx
       ansible.builtin.shell: |
-        certbot --nginx -d {{ domain }} -m {{ email }} --agree-tos --no-eff-email --redirect
+        certbot --nginx -d {{ DOMAIN }} -m {{ EMAIL }} --agree-tos --no-eff-email --redirect
       args:
-        creates: /etc/letsencrypt/live/{{ domain }}/fullchain.pem
+        creates: /etc/letsencrypt/live/{{ DOMAIN }}/fullchain.pem
 
     - name: Setup cron job for automatic cert renewal
       ansible.builtin.cron:
