@@ -3,19 +3,24 @@
   become: true
 
   tasks:
-    - name: Set environment variables
-      ansible.builtin.set_fact:
-        postgres_user: "{{ POSTGRES_USER }}"
-        postgres_password: "{{ POSTGRES_PASSWORD }}"
-        postgres_db: "{{ POSTGRES_DB }}"
-        admin_user: "{{ ADMIN_USER }}"
-        admin_password: "{{ ADMIN_PASSWORD }}"
-        admin_email: "{{ ADMIN_EMAIL }}"
-        aws_access_key_id: "{{ AWS_ACCESS_KEY_ID }}"
-        aws_secret_access_key: "{{ AWS_SECRET_ACCESS_KEY }}"
-        aws_region: "{{ AWS_REGION }}"
-        s3_bucket_name: "{{ S3_BUCKET_NAME }}"
-        endpoint: "{{ ENDPOINT }}"
+    - name: Create .env file
+      ansible.builtin.copy:
+        dest: /home/ubuntu/.env
+        content: |
+          POSTGRES_USER={{ POSTGRES_USER }}
+          POSTGRES_PASSWORD={{ POSTGRES_PASSWORD }}
+          POSTGRES_DB={{ POSTGRES_DB }}
+          ADMIN_USER={{ ADMIN_USER }}
+          ADMIN_PASSWORD={{ ADMIN_PASSWORD }}
+          ADMIN_EMAIL={{ ADMIN_EMAIL }}
+          AWS_ACCESS_KEY_ID={{ AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY={{ AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION={{ AWS_REGION }}
+          S3_BUCKET_NAME={{ S3_BUCKET_NAME }}
+          ENDPOINT={{ ENDPOINT }}
+        owner: root
+        group: root
+        mode: '0644'
 
     - name: Copy docker-compose.yml file
       ansible.builtin.copy:
