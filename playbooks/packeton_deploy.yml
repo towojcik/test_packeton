@@ -36,6 +36,7 @@
         dest: /home/ubuntu/.env.local
         owner: ubuntu
         group: ubuntu
+        mode: '0644'
 
     - name: Replace placeholders in .env.local file
       ansible.builtin.shell: |
@@ -43,6 +44,7 @@
             "sed -i "s#_AWS_REGION_#${AWS_REGION}#g" /home/ubuntu/.env.local"
             "sed -i "s#_AWS_ACCESS_KEY_ID_#${AWS_ACCESS_KEY_ID}#g" /home/ubuntu/.env.local"
             "sed -i "s#_AWS_SECRET_ACCESS_KEY_#${AWS_SECRET_ACCESS_KEY}#g" /home/ubuntu/.env.local"
+      become: true
       args:
         executable: /bin/bash
 
