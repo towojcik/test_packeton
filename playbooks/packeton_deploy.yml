@@ -17,6 +17,7 @@
           AWS_SECRET_ACCESS_KEY={{ AWS_SECRET_ACCESS_KEY }}
           AWS_REGION={{ AWS_REGION }}
           S3_BUCKET_NAME={{ S3_BUCKET_NAME }}
+          ENDPOINT={{ ENDPOINT }}
         owner: root
         group: root
         mode: '0644'
@@ -36,6 +37,14 @@
         owner: root
         group: root
         mode: '0644'
+
+    - name: Replace placeholders in .env.local file
+      ansible.builtin.shell:
+        cmd: |
+            "sed -i "s#_ENDPOINT_#${ENDPOINT}#g" /home/ubuntu/.env.local"
+            "sed -i "s#_AWS_REGION_#${AWS_REGION}#g" /home/ubuntu/.env.local"
+            "sed -i "s#_AWS_ACCESS_KEY_ID_#${AWS_ACCESS_KEY_ID}#g" /home/ubuntu/.env.local"
+            "sed -i "s#_AWS_SECRET_ACCESS_KEY_#${AWS_SECRET_ACCESS_KEY}#g" /home/ubuntu/.env.local"
 
     - name: Run docker compose file
       community.docker.docker_compose_v2:
@@ -59,4 +68,9 @@
       community.docker.docker_container_copy_into:
         container: packeton-packeton
         path: /home/ubuntu/.env.local
-        container_path: /data/.env.local
+        container_path: /tmp/.env.local
+
+    - name: Update .env file in container
+      community.docker.docker_container_exec:
+        container: packeton-packeton
+        command: "cat /tmp/.env.temp >> /path/to/.env && rm /tmp/.env.temp"
