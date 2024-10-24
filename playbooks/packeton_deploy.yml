@@ -55,7 +55,7 @@
 
     - name: Replace placeholders in .env.temp file
       ansible.builtin.shell: |
-            sed -i "s#_ENDPOINT_#${{ ENDPOINT}}#g" /home/ubuntu/.env.temp
+            sed -i "s#_ENDPOINT_#${{ ENDPOINT }}#g" /home/ubuntu/.env.temp
             sed -i "s#_AWS_REGION_#${{ AWS_REGION }}#g" /home/ubuntu/.env.temp
             sed -i "s#_AWS_ACCESS_KEY_ID_#${{ AWS_ACCESS_KEY_ID }}#g" /home/ubuntu/.env.temp
             sed -i "s#_AWS_SECRET_ACCESS_KEY_#${{ AWS_SECRET_ACCESS_KEY }}#g" /home/ubuntu/.env.temp
