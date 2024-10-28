@@ -65,5 +65,5 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
           docker exec -i packeton-packeton /bin/bash -c " \
-          bin/console packagist:user:manager ${{ github.event.imputs.username }} \
+          bin/console packagist:user:manager ${{ github.event.inputs.username }} \
           --delete"
