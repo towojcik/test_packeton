@@ -1,0 +1,64 @@
+name: Add packeton user
+
+on:
+  workflow_dispatch:
+    inputs:
+      maintainer:
+        type: choice
+        description: 'Packeton maintainer'
+        required: true
+        options:
+          - 'Add_user'
+          - 'Delete_user'
+      username:
+        type: string
+        description: 'Packeton username'
+        required: true
+        default: 'username'
+      email:
+        type: string
+        description: 'Packeton email'
+        default: ''
+      password:
+        type: string
+        description: 'Packeton password'
+        default: ''
+      role:
+        type: choice
+        description: 'Packeton role'
+        options:
+          - 'ROLE_USER'
+          - 'ROLE_FULL_CUSTOMER'
+          - 'ROLE_MAINTAINER'
+          - 'ROLE_ADMIN'
+
+jobs:
+  add-user:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: SSH to server
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY_SERVER }}" > private_key.pem
+        chmod 600 private_key.pem
+        eval $(ssh-agent -s)
+        echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add private_key.pem
+
+    - name: Add user
+      if: ${{ github.event.inputs.maintainer == 'Add_user' }}
+      run: |
+        docker exec -it packeton-packeton /bin/bash -c " \
+        bin/console packagist:user:manager ${{ github.event.inputs.username }} \
+        --email=${{ github.event.inputs.email }} \
+        --password=${{ github.event.inputs.password }} \
+        --add-role=${{ github.event.inputs.role }}"
+
+    - name: Delete user
+      if: ${{ github.event.inputs.maintainer == 'Delete_user' }}
+      run: |
+        docker exec -it packeton-packeton /bin/bash -c " \
+        bin/console packagist:user:manager ${{ github.event.imputs.username }} \
+        --delete"
