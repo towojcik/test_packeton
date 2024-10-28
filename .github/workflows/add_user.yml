@@ -40,13 +40,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: SSH to server
-      run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY_SERVER }}" > private_key.pem
-        chmod 600 private_key.pem
-        eval $(ssh-agent -s)
-        echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add private_key.pem
-
     - name: Add user
       if: ${{ github.event.inputs.maintainer == 'Add_user' }}
       uses: appleboy/ssh-action@v1.1.0
@@ -54,6 +47,7 @@ jobs:
         host: ${{ secrets.ANSIBLE_SERVER_IP }}
         username: ${{ secrets.ANSIBLE_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY_SERVER }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
           docker exec -i packeton-packeton /bin/bash -c " \
           bin/console packagist:user:manager ${{ github.event.inputs.username }} \
@@ -68,6 +62,7 @@ jobs:
         host: ${{ secrets.ANSIBLE_SERVER_IP }}
         username: ${{ secrets.ANSIBLE_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY_SERVER }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
           docker exec -i packeton-packeton /bin/bash -c " \
           bin/console packagist:user:manager ${{ github.event.imputs.username }} \
